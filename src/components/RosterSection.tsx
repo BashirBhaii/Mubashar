@@ -93,7 +93,7 @@ export function RosterSection() {
               <div className="relative w-full max-w-[340px] mx-auto lg:mx-0 aspect-[9/16] max-h-[520px] rounded-2xl overflow-hidden border border-hairline bg-[#48403F] shadow-2xl group">
                 <video
                   ref={videoRef}
-                  src="/public/assets/aistudio/47728_7506c39f.mp4"
+                  src="/assets/aistudio/47728_7506c39f.mp4"
                   autoPlay
                   loop
                   muted
@@ -183,7 +183,7 @@ export function RosterSection() {
               <div className="relative w-full max-w-[340px] mx-auto lg:mx-0 rounded-2xl overflow-hidden border border-hairline bg-[#48403F] shadow-xl group">
                 <div className="aspect-[4/3] w-full overflow-hidden">
                   <img
-                    src="/public/assets/aistudio/48004_8f9c21ae.jpg"
+                    src="/assets/aistudio/48004_8f9c21ae.jpg"
                     alt="Mubashar Hussain - Technical Specialist"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     loading="lazy"

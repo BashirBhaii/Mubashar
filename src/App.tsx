@@ -7,6 +7,7 @@ import { ReleasesSection } from './components/ReleasesSection';
 import { RosterSection } from './components/RosterSection';
 import { DatesTableSection } from './components/DatesTableSection';
 import { CloseSection } from './components/CloseSection';
+import { AIAgentWidget } from './components/AIAgentWidget';
 
 export default function App() {
   const scrollToPortal = () => {
@@ -52,6 +53,9 @@ export default function App() {
         {/* Section 06: Close & Edge-Cropped Wordmark */}
         <CloseSection />
       </main>
+
+      {/* Floating Interactive Vercel AI SDK Agent Widget */}
+      <AIAgentWidget />
     </div>
   );
 }

@@ -68,21 +68,21 @@ export function IntroShowcase({ onEnterPortal }: IntroShowcaseProps) {
   const PHOTO_ITEMS = [
     {
       id: 'img-horizon',
-      src: '/public/assets/aistudio/48005_6eefbbf7.jpg',
+      src: '/assets/aistudio/48005_6eefbbf7.jpg',
       title: 'Horizon Reflection',
       code: 'PLATE 02',
       location: 'Mirror Terrace • Pine Ridge',
     },
     {
       id: 'img-terrace',
-      src: '/public/assets/aistudio/48004_8f9c21ae.jpg',
+      src: '/assets/aistudio/48004_8f9c21ae.jpg',
       title: 'Terrace Reflection',
       code: 'PLATE 03',
       location: 'Sunset Specular • Mountain Glade',
     },
     {
       id: 'img-arch',
-      src: '/public/assets/aistudio/48009_11535b54.jpg',
+      src: '/assets/aistudio/48009_11535b54.jpg',
       title: 'Architectural Scale',
       code: 'PLATE 04',
       location: 'Grand Chandelier • Structural Focus',
@@ -215,7 +215,7 @@ export function IntroShowcase({ onEnterPortal }: IntroShowcaseProps) {
                   >
                     <video
                       ref={videoRef}
-                      src="/public/assets/aistudio/48003_946de653.mp4"
+                      src="/assets/aistudio/48003_946de653.mp4"
                       autoPlay
                       loop
                       muted
@@ -270,7 +270,7 @@ export function IntroShowcase({ onEnterPortal }: IntroShowcaseProps) {
                         <button
                           onClick={() => setLightboxItem({
                             type: 'video',
-                            src: '/public/assets/aistudio/48003_946de653.mp4',
+                            src: '/assets/aistudio/48003_946de653.mp4',
                             title: 'Mubashar Hussain - Primary Cinematic Reel',
                             tag: '01 // PRIMARY CINEMATIC REEL'
                           })}

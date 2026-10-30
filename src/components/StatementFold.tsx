@@ -79,7 +79,7 @@ export function StatementFold() {
           <div className="relative w-full max-w-[320px] sm:max-w-[350px] aspect-[3/4] rounded-2xl overflow-hidden border border-hairline bg-[#48403F] shadow-2xl group">
             {/* Horizon Reflection Photo */}
             <img
-              src="/public/assets/aistudio/48005_6eefbbf7.jpg"
+              src="/assets/aistudio/48005_6eefbbf7.jpg"
               alt="Mubashar Hussain - Horizon Reflection"
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               loading="lazy"

@@ -28,7 +28,7 @@ export function CloseSection() {
           <div className="lg:col-span-4 flex justify-center lg:justify-start">
             <div className="relative w-full max-w-[280px] sm:max-w-[300px] aspect-[3/4] rounded-2xl overflow-hidden border border-hairline bg-[#48403F] shadow-2xl group">
               <img
-                src="/public/assets/aistudio/48009_11535b54.jpg"
+                src="/assets/aistudio/48009_11535b54.jpg"
                 alt="Mubashar Hussain - Architectural Portrait"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 loading="lazy"

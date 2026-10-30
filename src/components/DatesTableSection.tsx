@@ -132,7 +132,7 @@ export function DatesTableSection() {
           <div className="lg:col-span-4 flex justify-center lg:justify-end w-full">
             <div className="relative w-full max-w-[320px] aspect-[3/4] rounded-2xl overflow-hidden border border-hairline bg-[#48403F] shadow-2xl group">
               <img
-                src="/public/assets/aistudio/48008_f9fead8e.jpg"
+                src="/assets/aistudio/48008_f9fead8e.jpg"
                 alt="Mubashar Hussain - Forest Canopy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 loading="lazy"
