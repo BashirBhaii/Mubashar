@@ -1,0 +1,1193 @@
+## Analytical Architecture & Implementation Plan
+
+To build Mubashir Hussain's personal portfolio website as a fresher full-stack developer, we synthesize two powerful design directions:
+
+1. **The Interactive Neon Tubes Background (`threejs-components`)**: Providing an immersive, responsive 3D cursor-interactive backdrop across the initial starting page/hero and seamlessly blending into the high-end dark editorial theme.
+2. **The Dark Editorial Record-Label Aesthetic**: Inspired by high-end design principles—near-black ground (`#0A0C0E`), warm bone ink (`#EDE7DC`), amber (`#E8913C`) & teal (`#2E6B72`) accents, geometric typography (`Syne` + `Sora`), a portal hero section with scroll-driven split-type kinetic typography and expanding panels, and a throwable interactive card deck for projects.
+
+### Core Sections Map (9 Total Sections + Custom Layout Rules)
+
+1. **Profile Picture (DP) & Background Banner**: Text left, picture right (zig-zag 1). Includes banner image and glowing neon ring DP.
+2. **Headline / Portal Hero**: Picture left, text right (zig-zag 2). Driven by scroll position with split-wordmark tracking/scaling, revealing a full-bleed portal image.
+3. **About / Summary**: Text left, picture right (zig-zag 3). Highlighting full-stack background, academic journey, and passion for clean engineering.
+4. **Experience**: Picture left, text right (zig-zag 4). Tailored for a fresher showcasing Apna College full-stack coursework, internships, and project milestones.
+5. **Education**: Text left, picture right (zig-zag 5). FSc Pre-Engineering and BS Computer Science studies.
+6. **Skills**: Picture left, text right (zig-zag 6). Animated skill chips and progress bars (HTML, CSS, JS, Node.js, Express, MongoDB, Mongoose, Bootstrap, Git/GitHub, C++).
+7. **Licenses & Certifications**: Text left, picture right (zig-zag 7). Course completion certificates with direct verification links.
+8. **Projects**: Picture left, text right (zig-zag 8). Interactive throwable deck or project cards with Live Demo and GitHub repository links.
+9. **Languages & Interests**: Text left, picture right (zig-zag 9). Language fluency badges and music production/coding interests.
+
+---
+
+## Complete Project Code & Files
+
+### 1. `package.json`
+
+```json
+{
+  "name": "mubashir-hussain-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "clsx": "^2.1.0",
+    "framer-motion": "^11.11.9",
+    "lucide-react": "^0.454.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.5.4",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.169.0",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}
+
+```
+
+### 2. `index.html`
+
+```html
+<!doctype html>
+<html lang="en" class="scroll-smooth dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mubashir Hussain — Full Stack Developer & UI/UX Designer</title>
+    <!-- Google Fonts: Syne & Sora -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#0A0C0E] text-[#EDE7DC] font-['Sora',sans-serif] selection:bg-[#E8913C] selection:text-[#0A0C0E] antialiased overflow-x-hidden">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
+```
+
+### 3. `tailwind.config.js`
+
+```javascript
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        ground: '#0A0C0E',
+        'ground-secondary': '#101317',
+        ink: '#EDE7DC',
+        'ink-secondary': '#9EA5A8',
+        muted: '#6C7378',
+        amber: '#E8913C',
+        teal: '#2E6B72',
+      },
+      fontFamily: {
+        display: ['Syne', 'sans-serif'],
+        sans: ['Sora', 'sans-serif'],
+      },
+      borderColor: {
+        hairline: 'rgba(237, 231, 220, 0.13)',
+      },
+    },
+  },
+  plugins: [],
+}
+
+```
+
+### 4. `postcss.config.js`
+
+```javascript
+export default {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+
+```
+
+### 5. `vite.config.ts`
+
+```typescript
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+})
+
+```
+
+### 6. `src/index.css`
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #0A0C0E;
+    color: #EDE7DC;
+    font-family: 'Sora', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Syne', sans-serif;
+    letter-spacing: -0.03em;
+  }
+}
+
+/* Custom Utilities & Glassmorphism */
+.glass-card {
+  background: rgba(16, 19, 23, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(237, 231, 220, 0.12);
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1px rgba(237, 231, 220, 0.25);
+  color: transparent;
+}
+
+```
+
+### 7. `src/utils.ts`
+
+```typescript
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+// Helper for random hex colors for the neon tubes background
+export const randomColors = (count: number) => {
+  return new Array(count)
+    .fill(0)
+    .map(() => "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'));
+};
+
+```
+
+### 8. `src/data.ts`
+
+```typescript
+export interface Project {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  tags: string[];
+  liveUrl: string;
+  githubUrl: string;
+  image: string;
+}
+
+export interface ExperienceItem {
+  period: string;
+  role: string;
+  organization: string;
+  description: string;
+  skills: string[];
+}
+
+export interface CertificationItem {
+  title: string;
+  issuer: string;
+  date: string;
+  link: string;
+}
+
+export const portfolioData = {
+  name: "Mubashir Hussain",
+  role: "Full Stack Developer & UI/UX Designer",
+  location: "Lahore, Pakistan",
+  email: "mubashir@example.com",
+  github: "https://github.com/BashirBhaii",
+  linkedin: "https://linkedin.com",
+  cvUrl: "/cv.pdf",
+  
+  headlines: [
+    "Full Stack JavaScript Engineer",
+    "MERN Stack & RESTful API Architect",
+    "UI/UX Designer & Creative Technologist"
+  ],
+
+  about: "I am Mubashir Hussain, a passionate fresher full-stack developer based in Lahore, Pakistan, originally from Gilgit-Baltistan. I specialize in building robust web applications with JavaScript, Node.js, Express, and MongoDB, backed by solid foundational training from Apna College and rigorous academic grounding in Computer Science. I combine clean backend architecture with polished, high-performance UI/UX design.",
+
+  skills: [
+    { name: "HTML5 & CSS3", level: 95 },
+    { name: "JavaScript (ES6+)", level: 90 },
+    { name: "Node.js", level: 85 },
+    { name: "Express.js", level: 85 },
+    { name: "MongoDB & Mongoose", level: 80 },
+    { name: "Bootstrap & Tailwind", level: 90 },
+    { name: "Git & GitHub", level: 88 },
+    { name: "C++ Programming", level: 75 }
+  ],
+
+  experiences: [
+    {
+      period: "2026 - Present",
+      role: "Full Stack Developer Trainee",
+      organization: "Apna College & Self-Directed Projects",
+      description: "Developing full-stack web applications including e-commerce platforms and social media clones with custom middleware, RESTful API routing, and robust error handling.",
+      skills: ["Node.js", "Express", "MongoDB", "JavaScript"]
+    },
+    {
+      period: "2024 - 2026",
+      role: "BS Computer Science Student",
+      organization: "University Coursework & Lab Projects",
+      description: "Studying core computer science paradigms, data structures, relational database management systems (MySQL, SQL Server), and software engineering principles.",
+      skills: ["C++", "SQL", "Data Structures"]
+    },
+    {
+      period: "2022 - 2024",
+      role: "FSc Pre-Engineering Student",
+      organization: "Federal Government Allama Iqbal Degree College",
+      description: "Completed rigorous intermediate diploma focusing on advanced mathematics, physics, and analytical problem-solving.",
+      skills: ["Mathematics", "Physics", "Analytical Thinking"]
+    }
+  ] as ExperienceItem[],
+
+  education: [
+    {
+      degree: "Bachelor of Science in Computer Science",
+      institution: "Affiliated University / Institute",
+      period: "Ongoing (Completed 3rd Semester)",
+      details: "Focusing on software architecture, algorithms, and full-stack web engineering."
+    },
+    {
+      degree: "FSc Pre-Engineering",
+      institution: "Federal Government Allama Iqbal Degree College",
+      period: "2022 - 2024",
+      details: "Studied physics, chemistry, and advanced mathematics with top honors."
+    }
+  ],
+
+  certifications: [
+    {
+      title: "Full Stack Web Development Program",
+      issuer: "Apna College (Shradha Khapra)",
+      date: "2026",
+      link: "https://github.com/BashirBhaii"
+    },
+    {
+      title: "JavaScript Algorithms and Data Structures",
+      issuer: "Professional Certification",
+      date: "2025",
+      link: "https://github.com/BashirBhaii"
+    }
+  ] as CertificationItem[],
+
+  projects: [
+    {
+      id: "proj-1",
+      title: "Airbnb Clone Platform",
+      category: "Full Stack Web App",
+      description: "A feature-rich property rental web application built with Node.js, Express, MongoDB, and Bootstrap featuring user authentication, reviews, and interactive maps.",
+      tags: ["Node.js", "Express", "MongoDB", "Bootstrap"],
+      liveUrl: "https://github.com/BashirBhaii",
+      githubUrl: "https://github.com/BashirBhaii",
+      image: "/images/projects.webp"
+    },
+    {
+      id: "proj-2",
+      title: "Instagram & Social Hub",
+      category: "Social Media Platform",
+      description: "Full-stack social media web application supporting user profiles, media posts, comments, and real-time interactions.",
+      tags: ["JavaScript", "Node.js", "Express", "MongoDB"],
+      liveUrl: "https://github.com/BashirBhaii",
+      githubUrl: "https://github.com/BashirBhaii",
+      image: "/images/projects.webp"
+    },
+    {
+      id: "proj-3",
+      title: "Interactive Music Production Suite",
+      category: "Creative Tool",
+      description: "Web audio interface and stem organizer inspired by DAW workflows, utilizing modern CSS grid and JavaScript audio APIs.",
+      tags: ["HTML5", "CSS3", "JavaScript"],
+      liveUrl: "https://github.com/BashirBhaii",
+      githubUrl: "https://github.com/BashirBhaii",
+      image: "/images/projects.webp"
+    }
+  ] as Project[],
+
+  languages: [
+    { name: "Urdu / Hindi", proficiency: "Native" },
+    { name: "English", proficiency: "Professional Proficiency" },
+    { name: "German", proficiency: "Beginner (Guten Tag / A1)" }
+  ],
+
+  interests: [
+    "Music Production & DAW Stem Mixing",
+    "AI Audio Generation & Moises AI",
+    "Full-Stack Architecture & MERN",
+    "UI/UX Design Systems",
+    "English Vocabulary & Professional Agility"
+  ]
+};
+
+```
+
+### 9. `src/Component.tsx` (Tubes Interactive Background)
+
+```tsx
+import React, { useEffect, useRef, useState } from 'react';
+import { randomColors } from './utils';
+
+interface TubesBackgroundProps {
+  children?: React.ReactNode;
+  className?: string;
+  enableClickInteraction?: boolean;
+}
+
+export function TubesBackground({ 
+  children, 
+  className,
+  enableClickInteraction = true 
+}: TubesBackgroundProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const tubesRef = useRef<any>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    let cleanup: (() => void) | undefined;
+
+    const initTubes = async () => {
+      if (!canvasRef.current) return;
+
+      try {
+        // @ts-ignore
+        const module = await import('https://cdn.jsdelivr.net/npm/threejs-components@0.0.19/build/cursors/tubes1.min.js');
+        const TubesCursor = module.default;
+
+        if (!mounted) return;
+
+        const app = TubesCursor(canvasRef.current, {
+          tubes: {
+            colors: ["#E8913C", "#2E6B72", "#EDE7DC"],
+            lights: {
+              intensity: 180,
+              colors: ["#E8913C", "#2E6B72", "#ffffff", "#9EA5A8"]
+            }
+          }
+        });
+
+        tubesRef.current = app;
+        setIsLoaded(true);
+
+        const handleResize = () => {
+          // Canvas auto-resizes via CSS, internal Three.js resize handled by library if listener attached
+        };
+
+        window.addEventListener('resize', handleResize);
+        
+        cleanup = () => {
+          window.removeEventListener('resize', handleResize);
+          try {
+            app.destroy?.();
+          } catch (e) {
+            // ignore cleanup errors
+          }
+        };
+
+      } catch (error) {
+        console.error("Failed to load TubesCursor from CDN, falling back to gradient background:", error);
+      }
+    };
+
+    initTubes();
+
+    return () => {
+      mounted = false;
+      if (cleanup) cleanup();
+    };
+  }, []);
+
+  const handleClick = (e: React.MouseEvent) => {
+    // Prevent randomizing if clicking interactive elements (buttons, links, inputs)
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('a') || target.closest('input') || target.closest('textarea')) {
+      return;
+    }
+
+    if (!enableClickInteraction || !tubesRef.current) return;
+    
+    const colors = randomColors(3);
+    const lightsColors = randomColors(4);
+    
+    try {
+      tubesRef.current.tubes.setColors(colors);
+      tubesRef.current.tubes.setLightsColors(lightsColors);
+    } catch (err) {
+      // ignore
+    }
+  };
+
+  return (
+    <div 
+      className={`relative w-full min-h-screen bg-ground overflow-x-hidden ${className || ''}`}
+      onClick={handleClick}
+    >
+      {/* Fixed Background Canvas */}
+      <canvas 
+        ref={canvasRef} 
+        className="fixed inset-0 w-full h-full -z-10 pointer-events-auto block"
+        style={{ touchAction: 'none' }}
+      />
+      
+      {/* Fallback gradient if canvas fails or during load */}
+      <div className="fixed inset-0 -z-20 bg-gradient-to-br from-ground via-ground-secondary to-ground" />
+
+      {/* Foreground Content Overlay */}
+      <div className="relative z-10 w-full pointer-events-auto">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+export default TubesBackground;
+
+```
+
+### 10. `src/components/Navbar.tsx`
+
+```tsx
+import React, { useState, useEffect } from 'react';
+import { Menu, X, Github, ArrowUpRight } from 'lucide-react';
+import { portfolioData } from '../data';
+
+const navLinks = [
+  { name: 'Profile', href: '#section-1' },
+  { name: 'Headline', href: '#section-2' },
+  { name: 'About', href: '#section-3' },
+  { name: 'Experience', href: '#section-4' },
+  { name: 'Education', href: '#section-5' },
+  { name: 'Skills', href: '#section-6' },
+  { name: 'Certifications', href: '#section-7' },
+  { name: 'Projects', href: '#section-8' },
+  { name: 'Interests', href: '#section-9' },
+];
+
+export function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('#section-1');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
+
+      const sections = navLinks.map(link => document.querySelector(link.href));
+      const scrollPosition = window.scrollY + 200;
+
+      sections.forEach((sec, idx) => {
+        if (sec) {
+          const top = (sec as HTMLElement).offsetTop;
+          const height = (sec as HTMLElement).offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(navLinks[idx].href);
+          }
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <header className={`fixed top-0 left-0 right-0 z-50 h-[58px] transition-all duration-300 flex items-center border-b border-hairline ${
+      scrolled ? 'bg-ground/85 backdrop-blur-md shadow-lg shadow-black/40' : 'bg-transparent'
+    }`}>
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 flex items-center justify-between">
+        
+        {/* Wordmark Logo */}
+        <a href="#section-1" className="font-display font-extrabold text-[15px] tracking-tight text-ink flex items-center gap-1 hover:text-amber transition-colors">
+          <span>{portfolioData.name.split(' ')[0]}</span>
+          <span className="text-amber">.</span>
+        </a>
+
+        {/* Desktop Links */}
+        <nav className="hidden lg:flex items-center gap-6">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.href;
+            return (
+              <a
+                key={link.name}
+                href={link.href}
+                className={`text-[10.5px] uppercase tracking-[0.12em] font-semibold transition-colors duration-200 ${
+                  isActive ? 'text-amber' : 'text-ink-secondary hover:text-amber'
+                }`}
+              >
+                {link.name}
+              </a>
+            );
+          })}
+        </nav>
+
+        {/* Action Button & Mobile Toggle */}
+        <div className="flex items-center gap-3">
+          <a
+            href={portfolioData.github}
+            target="_blank"
+            rel="noreferrer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full glass-card text-[11px] font-semibold uppercase tracking-wider text-ink hover:border-amber transition-all"
+          >
+            <Github className="w-3.5 h-3.5 text-amber" />
+            <span>GitHub</span>
+            <ArrowUpRight className="w-3 h-3 text-ink-secondary" />
+          </a>
+
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="lg:hidden text-ink p-1.5 rounded-lg glass-card hover:text-amber transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isOpen && (
+        <div className="absolute top-[58px] left-0 right-0 glass-card border-b border-hairline p-6 flex flex-col gap-4 lg:hidden shadow-2xl bg-ground/95 backdrop-blur-xl">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              onClick={() => setIsOpen(false)}
+              className="text-xs uppercase tracking-[0.15em] font-semibold text-ink hover:text-amber transition-colors py-1 border-b border-hairline/50"
+            >
+              {link.name}
+            </a>
+          ))}
+          <a
+            href={portfolioData.github}
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-amber text-ground font-bold text-xs uppercase tracking-wider mt-2"
+          >
+            <Github className="w-4 h-4" />
+            <span>Visit GitHub Profile</span>
+          </a>
+        </div>
+      )}
+    </header>
+  );
+}
+
+```
+
+### 11. `src/components/ImageWithFallback.tsx`
+
+```tsx
+import React, { useState } from 'react';
+
+interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  src: string;
+  alt: string;
+  className?: string;
+  fallbackGradient?: string;
+}
+
+export function ImageWithFallback({ src, alt, className = "", fallbackGradient = "from-amber/20 via-teal/20 to-ground", ...props }: ImageProps) {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError || !src) {
+    return (
+      <div className={`w-full h-full flex flex-col items-center justify-center bg-gradient-to-br ${fallbackGradient} border border-hairline p-6 text-center rounded-2xl ${className}`}>
+        <span className="font-display text-xs uppercase tracking-widest text-amber mb-1">Mubashir Hussain</span>
+        <span className="text-[11px] text-ink-secondary tracking-wide">{alt}</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      loading="lazy"
+      onError={() => setHasError(true)}
+      className={`object-cover rounded-2xl border border-hairline shadow-lg ${className}`}
+      {...props}
+    />
+  );
+}
+
+```
+
+### 12. `src/sections/Sections.tsx`
+
+```tsx
+import React, { useState } from 'react';
+import { portfolioData, Project } from '../data';
+import { ImageWithFallback } from '../components/ImageWithFallback';
+import { Download, ExternalLink, Github, Mail, Linkedin, CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react';
+
+export function PortfolioSections() {
+  // Deck state for Projects section
+  const [deckIndex, setDeckIndex] = useState(0);
+  const projects = portfolioData.projects;
+
+  const handleNextProject = () => {
+    setDeckIndex((prev) => (prev + 1) % projects.length);
+  };
+
+  const handlePrevProject = () => {
+    setDeckIndex((prev) => (prev - 1 + projects.length) % projects.length);
+  };
+
+  return (
+    <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-32 space-y-24">
+      
+      {/* ========================================= */}
+      {/* SECTION 1: Profile Picture & Banner       }
+      {/* Layout: text LEFT, picture RIGHT          }
+      {/* ========================================= */}
+      <section id="section-1" className="glass-card rounded-3xl p-8 sm:p-12 border border-hairline relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-40 overflow-hidden opacity-30">
+          <ImageWithFallback src="/images/banner.webp" alt="Banner background" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center pt-8 md:pt-16">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-card border border-hairline text-[10.5px] uppercase tracking-[0.15em] text-amber">
+              <span>Fresh Full-Stack Developer</span>
+            </div>
+            <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-ink font-display">
+              {portfolioData.name}<span className="text-amber">.</span>
+            </h1>
+            <p className="text-ink-secondary text-sm sm:text-base leading-relaxed">
+              {portfolioData.about}
+            </p>
+            <div className="flex flex-wrap gap-4 pt-2">
+              <a
+                href={portfolioData.cvUrl}
+                download="Mubashir_Hussain_CV.pdf"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-amber text-ground font-bold text-xs uppercase tracking-wider hover:bg-amber/90 transition-all shadow-lg shadow-amber/20"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download CV</span>
+              </a>
+              <a
+                href={`mailto:${portfolioData.email}`}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card border border-hairline text-ink font-semibold text-xs uppercase tracking-wider hover:border-amber transition-all"
+              >
+                <Mail className="w-4 h-4 text-amber" />
+                <span>Email Me</span>
+              </a>
+              <a
+                href={portfolioData.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-3 rounded-full glass-card border border-hairline text-ink hover:border-teal transition-all"
+                aria-label="LinkedIn Profile"
+              >
+                <Linkedin className="w-4 h-4 text-teal" />
+              </a>
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full p-1.5 bg-gradient-to-tr from-amber via-teal to-ink/20 shadow-2xl">
+              <div className="w-full h-full rounded-full overflow-hidden bg-ground">
+                <ImageWithFallback src="/images/dp.webp" alt="Mubashir Hussain DP" className="w-full h-full object-cover" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================= */}
+      {/* SECTION 2: Headline & Portal Stage        }
+      {/* Layout: picture LEFT, text RIGHT          }
+      {/* ========================================= */}
+      <section id="section-2" className="glass-card rounded-3xl p-8 sm:p-12 border border-hairline">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div className="order-2 md:order-1">
+            <div className="w-full h-[400px] rounded-2xl overflow-hidden relative shadow-2xl">
+              <ImageWithFallback src="/images/headline.webp" alt="Portal Headline" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-ground/90 via-transparent to-transparent flex items-end p-6">
+                <span className="text-xs uppercase tracking-[0.2em] text-amber font-semibold">Portal Stage & Architecture</span>
+              </div>
+            </div>
+          </div>
+          <div className="order-1 md:order-2 space-y-6">
+            <span className="text-xs uppercase tracking-[0.15em] text-teal font-semibold">02 / Kinetic Typography</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight font-display">
+              Building Scalable & Dynamic Web Portals
+            </h2>
+            <p className="text-ink-secondary text-sm sm:text-base leading-relaxed">
+              As a dedicated developer from Gilgit-Baltistan residing in Lahore, I craft digital experiences that combine high-performance MERN backend logic with immersive front-end UI/UX animations.
+            </p>
+            <div className="space-y-2 pt-2">
+              {portfolioData.headlines.map((hl, idx) => (
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-xl glass-card border border-hairline">
+                  <span className="w-2 h-2 rounded-full bg-amber" />
+                  <span className="text-xs sm:text-sm font-semibold text-ink">{hl}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================= */}
+      {/* SECTION 3: About / Summary                }
+      {/* Layout: text LEFT, picture RIGHT          }
+      {/* ========================================= */}
+      <section id="section-3" className="glass-card rounded-3xl p-8 sm:p-12 border border-hairline">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div className="space-y-6">
+            <span className="text-xs uppercase tracking-[0.15em] text-amber font-semibold">03 / Background & Journey</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight font-display">
+              Rooted in Engineering, Driven by Code
+            </h2>
+            <p className="text-ink-secondary text-sm sm:text-base leading-relaxed">
+              Having completed my FSc Pre-Engineering at Federal Government Allama Iqbal Degree College and pursuing my BS in Computer Science, I bring structured analytical thinking to full-stack JavaScript engineering.
+            </p>
+            <div className="grid grid-cols-2 gap-4 pt-2">
+              <div className="p-4 rounded-2xl glass-card border border-hairline">
+                <span className="block font-display text-2xl font-bold text-amber">MERN</span>
+                <span className="text-xs text-ink-secondary uppercase tracking-wider">Stack Specialization</span>
+              </div>
+              <div className="p-4 rounded-2xl glass-card border border-hairline">
+                <span className="block font-display text-2xl font-bold text-teal">3rd Sem</span>
+                <span className="text-xs text-ink-secondary uppercase tracking-wider">BS Computer Science</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="w-full h-[400px] rounded-2xl overflow-hidden relative shadow-2xl">
+              <ImageWithFallback src="/images/about.webp" alt="About Mubashir" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================= */}
+      {/* SECTION 4: Experience                     }
+      {/* Layout: picture LEFT, text RIGHT          }
+      {/* ========================================= */}
+      <section id="section-4" className="glass-card rounded-3xl p-8 sm:p-12 border border-hairline">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div className="order-2 md:order-1">
+            <div className="w-full h-[420px] rounded-2xl overflow-hidden relative shadow-2xl">
+              <ImageWithFallback src="/images/experience.webp" alt="Experience Timeline" className="w-full h-full object-cover" />
+            </div>
+          </div>
+          <div className="order-1 md:order-2 space-y-6">
+            <span className="text-xs uppercase tracking-[0.15em] text-teal font-semibold">04 / Experience & Milestones</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight font-display">
+              Practical Development & Training
+            </h2>
+            <div className="space-y-4 pt-2">
+              {portfolioData.experiences.map((exp, idx) => (
+                <div key={idx} className="p-4 rounded-2xl glass-card border border-hairline space-y-2">
+                  <div className="flex items-center justify-between text-xs text-amber font-semibold">
+                    <span>{exp.organization}</span>
+                    <span>{exp.period}</span>
+                  </div>
+                  <h3 className="text-base font-bold text-ink font-display">{exp.role}</h3>
+                  <p className="text-xs text-ink-secondary leading-relaxed">{exp.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================= */}
+      {/* SECTION 5: Education                      }
+      {/* Layout: text LEFT, picture RIGHT          }
+      {/* ========================================= */}
+      <section id="section-5" className="glass-card rounded-3xl p-8 sm:p-12 border border-hairline">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div className="space-y-6">
+            <span className="text-xs uppercase tracking-[0.15em] text-amber font-semibold">05 / Education</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight font-display">
+              Academic Foundation
+            </h2>
+            <div className="space-y-4 pt-2">
+              {portfolioData.education.map((edu, idx) => (
+                <div key={idx} className="p-4 rounded-2xl glass-card border border-hairline space-y-1">
+                  <span className="text-[11px] text-teal font-semibold uppercase tracking-wider">{edu.period}</span>
+                  <h3 className="text-lg font-bold text-ink font-display">{edu.degree}</h3>
+                  <p className="text-xs text-amber font-medium">{edu.institution}</p>
+                  <p className="text-xs text-ink-secondary">{edu.details}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="w-full h-[400px] rounded-2xl overflow-hidden relative shadow-2xl">
+              <ImageWithFallback src="/images/education.webp" alt="Education background" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================= */}
+      {/* SECTION 6: Skills                         }
+      {/* Layout: picture LEFT, text RIGHT          }
+      {/* ========================================= */}
+      <section id="section-6" className="glass-card rounded-3xl p-8 sm:p-12 border border-hairline">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div className="order-2 md:order-1">
+            <div className="w-full h-[400px] rounded-2xl overflow-hidden relative shadow-2xl">
+              <ImageWithFallback src="/images/skills.png" alt="Technical Skills" className="w-full h-full object-cover" />
+            </div>
+          </div>
+          <div className="order-1 md:order-2 space-y-6">
+            <span className="text-xs uppercase tracking-[0.15em] text-teal font-semibold">06 / Technical Stack</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight font-display">
+              Core Skills & Proficiencies
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              {portfolioData.skills.map((skill, idx) => (
+                <div key={idx} className="p-3 rounded-xl glass-card border border-hairline space-y-2">
+                  <div className="flex justify-between items-center text-xs font-semibold text-ink">
+                    <span>{skill.name}</span>
+                    <span className="text-amber">{skill.level}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-ground rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-amber to-teal rounded-full" style={{ width: `${skill.level}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================= */}
+      {/* SECTION 7: Licenses & Certifications      }
+      {/* Layout: text LEFT, picture RIGHT          }
+      {/* ========================================= */}
+      <section id="section-7" className="glass-card rounded-3xl p-8 sm:p-12 border border-hairline">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div className="space-y-6">
+            <span className="text-xs uppercase tracking-[0.15em] text-amber font-semibold">07 / Credentials</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight font-display">
+              Licenses & Certifications
+            </h2>
+            <div className="space-y-4 pt-2">
+              {portfolioData.certifications.map((cert, idx) => (
+                <div key={idx} className="p-4 rounded-2xl glass-card border border-hairline flex items-center justify-between gap-4">
+                  <div className="space-y-1">
+                    <span className="text-[11px] text-teal font-semibold uppercase tracking-wider">{cert.issuer} • {cert.date}</span>
+                    <h3 className="text-base font-bold text-ink font-display">{cert.title}</h3>
+                  </div>
+                  <a
+                    href={cert.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-2.5 rounded-xl bg-amber/10 text-amber hover:bg-amber hover:text-ground transition-all"
+                    aria-label="View Certificate"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="w-full h-[400px] rounded-2xl overflow-hidden relative shadow-2xl">
+              <ImageWithFallback src="/images/certs.webp" alt="Certifications" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================= */}
+      {/* SECTION 8: Projects (Throwable Deck)      }
+      {/* Layout: picture LEFT, text RIGHT          }
+      {/* ========================================= */}
+      <section id="section-8" className="glass-card rounded-3xl p-8 sm:p-12 border border-hairline">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div className="order-2 md:order-1 flex flex-col items-center">
+            {/* Throwable Card Deck Container */}
+            <div className="w-full max-w-sm h-[380px] relative flex items-center justify-center">
+              {projects.map((proj, idx) => {
+                const isCurrent = idx === deckIndex;
+                const offset = (idx - deckIndex + projects.length) % projects.length;
+                return (
+                  <div
+                    key={proj.id}
+                    className={`absolute inset-4 glass-card rounded-2xl p-6 border border-hairline flex flex-col justify-between transition-all duration-500 shadow-2xl ${
+                      isCurrent ? 'z-30 scale-100 rotate-0 opacity-100' : 'z-10 scale-95 translate-y-3 rotate-3 opacity-40 pointer-events-none'
+                    }`}
+                  >
+                    <div className="space-y-2">
+                      <span className="text-[10.5px] uppercase tracking-[0.15em] text-amber font-semibold">{proj.category}</span>
+                      <h3 className="text-xl font-bold text-ink font-display">{proj.title}</h3>
+                      <p className="text-xs text-ink-secondary leading-relaxed line-clamp-3">{proj.description}</p>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap gap-1.5">
+                        {proj.tags.map((tag, tIdx) => (
+                          <span key={tIdx} className="px-2.5 py-1 rounded-md bg-ground text-[10px] text-teal font-medium border border-hairline">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex items-center gap-3 pt-2">
+                        <a
+                          href={proj.liveUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex-1 py-2 text-center rounded-xl bg-amber text-ground font-bold text-xs uppercase tracking-wider hover:bg-amber/90 transition-all"
+                        >
+                          Live Demo
+                        </a>
+                        <a
+                          href={proj.githubUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="p-2 rounded-xl glass-card border border-hairline text-ink hover:border-amber transition-all"
+                          aria-label="GitHub Repository"
+                        >
+                          <Github className="w-4 h-4" />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {/* Deck Navigation Controls */}
+            <div className="flex items-center gap-4 mt-6">
+              <button
+                onClick={handlePrevProject}
+                className="p-2.5 rounded-full glass-card border border-hairline text-ink hover:text-amber hover:border-amber transition-all"
+                aria-label="Previous Project"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </button>
+              <span className="text-xs uppercase tracking-widest text-ink-secondary">
+                Card {deckIndex + 1} of {projects.length}
+              </span>
+              <button
+                onClick={handleNextProject}
+                className="p-2.5 rounded-full glass-card border border-hairline text-ink hover:text-amber hover:border-amber transition-all"
+                aria-label="Next Project"
+              >
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+          <div className="order-1 md:order-2 space-y-6">
+            <span className="text-xs uppercase tracking-[0.15em] text-amber font-semibold">08 / Featured Projects</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight font-display">
+              Full Stack Applications & Clones
+            </h2>
+            <p className="text-ink-secondary text-sm sm:text-base leading-relaxed">
+              Explore my portfolio projects featuring Airbnb and Instagram full-stack clones. Built with Node.js, Express, MongoDB, and responsive Bootstrap/Tailwind interfaces. Use the interactive card deck to flip through projects.
+            </p>
+            <div className="flex items-center gap-2 text-xs text-amber font-semibold">
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Real-time interactions & fully responsive</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================= */}
+      {/* SECTION 9: Languages & Interests          }
+      {/* Layout: text LEFT, picture RIGHT          }
+      {/* ========================================= */}
+      <section id="section-9" className="glass-card rounded-3xl p-8 sm:p-12 border border-hairline">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div className="space-y-6">
+            <span className="text-xs uppercase tracking-[0.15em] text-teal font-semibold">09 / Languages & Interests</span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight font-display">
+              Beyond the Code
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-xs uppercase tracking-[0.15em] text-amber font-semibold mb-3">Languages</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {portfolioData.languages.map((lang, idx) => (
+                    <div key={idx} className="p-3 rounded-xl glass-card border border-hairline text-center">
+                      <span className="block text-xs font-bold text-ink">{lang.name}</span>
+                      <span className="text-[10px] text-ink-secondary">{lang.proficiency}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <h3 className="text-xs uppercase tracking-[0.15em] text-amber font-semibold mb-3">Interests & Hobbies</h3>
+                <div className="flex flex-wrap gap-2">
+                  {portfolioData.interests.map((interest, idx) => (
+                    <span key={idx} className="px-3 py-1.5 rounded-lg glass-card border border-hairline text-xs text-ink">
+                      {interest}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="w-full h-[400px] rounded-2xl overflow-hidden relative shadow-2xl">
+              <ImageWithFallback src="/images/interests.webp" alt="Interests and Languages" className="w-full h-full object-cover" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  );
+}
+
+```
+
+### 13. `src/App.tsx`
+
+```tsx
+import React from 'react';
+import { TubesBackground } from './Component';
+import { Navbar } from './components/Navbar';
+import { PortfolioSections } from './sections/Sections';
+import { portfolioData } from './data';
+import { Github, Linkedin, Mail, ExternalLink } from 'lucide-react';
+
+export default function App() {
+  return (
+    <TubesBackground>
+      <div className="min-h-screen flex flex-col justify-between font-sans">
+        <Navbar />
+        
+        {/* Main Content Sections */}
+        <PortfolioSections />
+
+        {/* Footer */}
+        <footer className="w-full border-t border-hairline bg-ground/90 backdrop-blur-md py-12 px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+            <div>
+              <span className="font-display font-extrabold text-lg text-ink">
+                {portfolioData.name}<span className="text-amber">.</span>
+              </span>
+              <p className="text-xs text-ink-secondary mt-1">
+                Full Stack Web Developer & UI/UX Designer • Based in Lahore, Pakistan
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <a
+                href={portfolioData.github}
+                target="_blank"
+                rel="noreferrer"
+                className="p-2.5 rounded-full glass-card border border-hairline text-ink hover:text-amber hover:border-amber transition-all"
+                aria-label="GitHub Profile"
+              >
+                <Github className="w-4 h-4" />
+              </a>
+              <a
+                href={`mailto:${portfolioData.email}`}
+                className="p-2.5 rounded-full glass-card border border-hairline text-ink hover:text-amber hover:border-amber transition-all"
+                aria-label="Email"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
+              <a
+                href={portfolioData.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="p-2.5 rounded-full glass-card border border-hairline text-ink hover:text-amber hover:border-amber transition-all"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </TubesBackground>
+  );
+}
+
+```
+
+### 14. `src/main.tsx`
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.tsx'
+import './index.css'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+
+```
+
+---
+
+## Step-by-Step Installation & Run Guide
+
+1. **Initialize Vite React TypeScript Project**:
+```bash
+npm create vite@latest mubashir-portfolio -- --template react-ts
+cd mubashir-portfolio
+
+```
+
+
+2. **Install Dependencies**:
+```bash
+npm install three framer-motion lucide-react clsx tailwind-merge
+npm install -D tailwindcss postcss autoprefixer @types/three
+npx tailwindcss init -p
+
+```
+
+
+3. **Replace Files**: Copy and paste the code provided above into their respective file paths (`package.json`, `index.html`, `tailwind.config.js`, `postcss.config.js`, `vite.config.ts`, `src/index.css`, `src/utils.ts`, `src/data.ts`, `src/Component.tsx`, `src/components/Navbar.tsx`, `src/components/ImageWithFallback.tsx`, `src/sections/Sections.tsx`, `src/App.tsx`, and `src/main.tsx`).
+4. **Add Assets**: Create a `public/images/` directory and place your pictures with the requested filenames (or rely on the built-in gradient fallbacks):
+* `/public/images/banner.webp` (1920x600)
+* `/public/images/dp.webp` (800x800)
+* `/public/images/headline.webp` (800x1000)
+* `/public/images/about.webp` (800x1000)
+* `/public/images/experience.webp` (800x1000)
+* `/public/images/education.webp` (800x1000)
+* `/public/images/skills.png` (800x1000)
+* `/public/images/certs.webp` (800x1000)
+* `/public/images/projects.webp` (800x1000)
+* `/public/images/interests.webp` (800x1000)
+* `/public/cv.pdf` (Your CV PDF)
+
+
+5. **Run Development Server**:
+```bash
+npm run dev
+
+```

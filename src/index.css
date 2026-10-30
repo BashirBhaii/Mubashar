@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ground: #383636;
+  --color-ground-secondary: #2C2A2A;
+  --color-ink: #EDE7DC;
+  --color-ink-secondary: #DDD6CE;
+  --color-muted: #C2B9B2;
+  --color-amber: #E8913C;
+  --color-teal: #4EA8AF;
+  --font-display: 'Syne', sans-serif;
+  --font-sans: 'Sora', sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #383636;
+  }
+  
+  body {
+    background-color: #383636;
+    color: #EDE7DC;
+    font-family: 'Sora', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Syne', sans-serif;
+    letter-spacing: -0.025em;
+  }
+}
+
+/* Hairline utility strictly following rgba(237,231,220,0.13) */
+.border-hairline {
+  border-color: rgba(237, 231, 220, 0.13) !important;
+}
+
+.divide-hairline > * + * {
+  border-color: rgba(237, 231, 220, 0.13) !important;
+}
+
+/* Stroke numeral */
+.text-stroke-numeral {
+  -webkit-text-stroke: 1.5px rgba(237, 231, 220, 0.18);
+  color: transparent;
+}
+
+/* Deck card shadow (only deck cards get shadow) */
+.deck-shadow {
+  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.85), 0 0 1px 1px rgba(237, 231, 220, 0.08);
+}
