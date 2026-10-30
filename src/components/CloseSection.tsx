@@ -8,9 +8,13 @@ export function CloseSection() {
 
   const handleDispatchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (dispatchEmail.trim()) {
-      setDispatchSubmitted(true);
-    }
+    const senderEmail = dispatchEmail.trim();
+    if (!senderEmail) return;
+
+    const subject = encodeURIComponent('Portfolio inquiry');
+    const body = encodeURIComponent(`Please contact me at ${senderEmail}.`);
+    window.location.href = `mailto:mubashar11711@gmail.com?subject=${subject}&body=${body}`;
+    setDispatchSubmitted(true);
   };
 
   return (
@@ -95,7 +99,7 @@ export function CloseSection() {
               ) : (
                 <div className="px-5 py-3 border border-hairline font-mono text-[11px] uppercase tracking-wider text-teal flex items-center gap-2">
                   <Check className="w-3.5 h-3.5 text-teal" />
-                  <span>INQUIRY TRANSMITTED</span>
+                  <span>CHECK YOUR EMAIL APP TO SEND</span>
                 </div>
               )}
             </div>

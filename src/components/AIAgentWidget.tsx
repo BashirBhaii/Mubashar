@@ -114,39 +114,53 @@ export const AIAgentWidget: React.FC = () => {
           m.id === assistantId ? { ...m, isStreaming: false } : m
         )
       );
-    } catch (err: any) {
-      console.warn('Backend API request error, activating client agent fallback:', err);
+    } catch (error) {
       setActiveTool(null);
 
-      // Intelligent client fallback for preview & zero-key setups
-      const fallbackResponse = getSimulatedAgentResponse(text);
-      let streamedLength = 0;
-      setStatus('streaming');
+      if (error instanceof TypeError) {
+        console.warn('Backend API unavailable; using the local preview response.', error);
+        const fallbackResponse = getSimulatedAgentResponse(text);
+        let streamedLength = 0;
+        setStatus('streaming');
 
-      const interval = setInterval(() => {
-        streamedLength += 4;
-        const currentSlice = fallbackResponse.slice(0, streamedLength);
+        await new Promise<void>(resolve => {
+          const interval = window.setInterval(() => {
+            streamedLength += 4;
+            const currentSlice = fallbackResponse.slice(0, streamedLength);
 
+            setMessages(prev =>
+              prev.map(m =>
+                m.id === assistantId
+                  ? { ...m, content: currentSlice, isStreaming: true }
+                  : m
+              )
+            );
+
+            if (streamedLength >= fallbackResponse.length) {
+              window.clearInterval(interval);
+              setMessages(prev =>
+                prev.map(m =>
+                  m.id === assistantId ? { ...m, isStreaming: false } : m
+                )
+              );
+              resolve();
+            }
+          }, 20);
+        });
+      } else {
+        console.error('AI agent request failed:', error);
         setMessages(prev =>
           prev.map(m =>
             m.id === assistantId
-              ? { ...m, content: currentSlice, isStreaming: true }
+              ? {
+                  ...m,
+                  content: 'The AI service is temporarily unavailable. Please try again later.',
+                  isStreaming: false
+                }
               : m
           )
         );
-
-        if (streamedLength >= fallbackResponse.length) {
-          clearInterval(interval);
-          setMessages(prev =>
-            prev.map(m =>
-              m.id === assistantId ? { ...m, isStreaming: false } : m
-            )
-          );
-          setStatus('idle');
-        }
-      }, 20);
-
-      return;
+      }
     } finally {
       setStatus('idle');
       setActiveTool(null);
