@@ -64,27 +64,24 @@ export function IntroShowcase({ onEnterPortal }: IntroShowcaseProps) {
     }
   };
 
-  // 3 Archival Photo Plates
+  // Archival photos displayed in the intro collage
   const PHOTO_ITEMS = [
     {
       id: 'img-horizon',
       src: '/assets/aistudio/48005_6eefbbf7.jpg',
       title: 'Horizon Reflection',
-      code: 'PLATE 02',
       location: 'Mirror Terrace • Pine Ridge',
     },
     {
       id: 'img-terrace',
       src: '/assets/aistudio/48004_8f9c21ae.jpg',
       title: 'Terrace Reflection',
-      code: 'PLATE 03',
       location: 'Sunset Specular • Mountain Glade',
     },
     {
       id: 'img-arch',
       src: '/assets/aistudio/48009_11535b54.jpg',
       title: 'Architectural Scale',
-      code: 'PLATE 04',
       location: 'Grand Chandelier • Structural Focus',
     }
   ];
@@ -299,7 +296,7 @@ export function IntroShowcase({ onEnterPortal }: IntroShowcaseProps) {
                         type: 'image',
                         src: photo.src,
                         title: photo.title,
-                        tag: `${photo.code} // ${photo.title.toUpperCase()}`,
+                        tag: photo.title.toUpperCase(),
                         meta: photo.location
                       })}
                       className="group relative w-full aspect-square rounded-2xl overflow-hidden border border-hairline bg-[#101317] hover:border-amber transition-all duration-300 cursor-pointer shadow-[0_15px_35px_-8px_rgba(0,0,0,0.85)] flex flex-col justify-end"
@@ -314,19 +311,9 @@ export function IntroShowcase({ onEnterPortal }: IntroShowcaseProps) {
                       {/* Gradient Overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-85 group-hover:opacity-60 transition-opacity" />
 
-                      {/* Top Badge */}
-                      <div className="absolute top-2.5 left-2.5 z-10">
-                        <span className="px-2 py-0.5 rounded bg-[#0A0C0E]/80 backdrop-blur-md border border-hairline text-[8px] uppercase tracking-[0.14em] font-mono text-ink">
-                          {photo.code}
-                        </span>
-                      </div>
-
                       {/* Bottom Details */}
                       <div className="relative z-10 p-2.5 flex items-end justify-between">
                         <div>
-                          <span className="text-[7.5px] font-mono uppercase tracking-[0.16em] text-teal block truncate">
-                            {photo.code} // SQUARE PLATE
-                          </span>
                           <h4 className="font-display font-bold text-xs text-ink truncate">
                             {photo.title}
                           </h4>

@@ -128,35 +128,18 @@ export function DatesTableSection() {
 
           </div>
 
-          {/* Right Column (lg:col-span-4): Forest Canopy Photo Card */}
+          {/* Right Column (lg:col-span-4): Project video */}
           <div className="lg:col-span-4 flex justify-center lg:justify-end w-full">
-            <div className="relative w-full max-w-[320px] aspect-[3/4] rounded-2xl overflow-hidden border border-hairline bg-[#48403F] shadow-2xl group">
-              <img
-                src="/assets/aistudio/48008_f9fead8e.jpg"
-                alt="Mubashar Hussain - Forest Canopy"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex items-end p-5">
-                <div className="space-y-1.5">
-                  <span className="text-[9px] font-mono uppercase tracking-[0.18em] text-teal block">
-                    PLATE 02 // FOREST CANOPY
-                  </span>
-                  <h3 className="font-display font-bold text-base text-ink">
-                    Mubashar Hussain
-                  </h3>
-                  <p className="text-[11px] font-mono text-secondary">
-                    Full Stack Engineer • AI Integration
-                  </p>
-                  <div className="pt-2 flex items-center gap-2 border-t border-hairline/60">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber animate-pulse" />
-                    <span className="text-[9.5px] font-mono uppercase tracking-[0.14em] text-amber">
-                      AVAILABILITY: OPEN FOR COMMISSIONS
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <video
+              src="/assets/aistudio/47730_21969c1b.mp4"
+              aria-label="AHAPE International website project video"
+              autoPlay
+              loop
+              muted
+              playsInline
+              controls
+              className="w-full max-w-[320px] aspect-[3/4] rounded-2xl border border-hairline bg-[#48403F] object-cover shadow-2xl"
+            />
           </div>
 
         </div>

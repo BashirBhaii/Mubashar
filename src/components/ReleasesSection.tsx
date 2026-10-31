@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { RELEASES } from '../data';
-import { ReleaseItem } from '../types';
-import { ArrowLeft, ArrowRight, Disc3, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 
 export function ReleasesSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -14,34 +13,34 @@ export function ReleasesSection() {
 
   const currentRelease = RELEASES[currentIndex];
 
-  // Advance card deck forward
-  const nextCard = useCallback((direction: 'left' | 'right' = 'right') => {
+  const changeCard = useCallback((direction: 'left' | 'right', step: number) => {
     if (isThrowing) return;
     setIsThrowing(true);
     setThrowDirection(direction);
 
     setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % RELEASES.length);
+      setCurrentIndex((prev) => (prev + step + RELEASES.length) % RELEASES.length);
       setDragOffset({ x: 0, y: 0 });
       setIsThrowing(false);
     }, 280);
   }, [isThrowing]);
 
-  // Previous card
+  const nextCard = useCallback((direction: 'left' | 'right' = 'right') => {
+    changeCard(direction, 1);
+  }, [changeCard]);
+
   const prevCard = useCallback(() => {
-    if (isThrowing) return;
-    setCurrentIndex((prev) => (prev - 1 + RELEASES.length) % RELEASES.length);
-    setDragOffset({ x: 0, y: 0 });
-  }, [isThrowing]);
+    changeCard('left', -1);
+  }, [changeCard]);
 
   // Keyboard navigation for accessibility
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowRight' || e.key === 'Space') {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Spacebar') {
       e.preventDefault();
       nextCard('right');
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      nextCard('left');
+      prevCard();
     }
   };
 
@@ -126,8 +125,16 @@ export function ReleasesSection() {
             </div>
           </div>
 
-          {/* Two buttons */}
+          {/* Project deck navigation */}
           <div className="flex flex-wrap items-center gap-4 pt-2">
+            <button
+              onClick={prevCard}
+              className="px-6 py-3 border border-hairline text-[11px] uppercase tracking-[0.15em] font-semibold text-ink hover:text-amber hover:border-amber transition-colors flex items-center gap-2 cursor-pointer"
+              aria-label="Show previous project"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-amber" />
+              <span>Previous Project Card</span>
+            </button>
             <button
               onClick={() => nextCard('right')}
               className="px-6 py-3 border border-hairline text-[11px] uppercase tracking-[0.15em] font-semibold text-ink hover:text-amber hover:border-amber transition-colors flex items-center gap-2 cursor-pointer"
@@ -156,7 +163,7 @@ export function ReleasesSection() {
             onKeyDown={handleKeyDown}
             className="relative w-[310px] h-[310px] sm:w-[390px] sm:h-[390px] outline-none select-none cursor-grab active:cursor-grabbing focus-visible:ring-1 focus-visible:ring-amber"
             style={{ touchAction: 'pan-y' }}
-            aria-label="Physical vinyl sleeve deck. Use left and right arrow keys or drag to discard."
+            aria-label="Project deck. Use left and right arrow keys to navigate or drag to advance."
           >
             {/* Render cards in reverse order so top card is on top */}
             {[2, 1, 0].map((stackPosition) => {
@@ -251,7 +258,7 @@ export function ReleasesSection() {
           {/* Hint line and progress dots beneath deck */}
           <div className="mt-8 text-center space-y-3">
             <p className="text-[10px] uppercase tracking-[0.18em] text-muted font-mono">
-              DRAG SLEEVE OR USE ← / → KEYS TO DISCARD
+              DRAG TO ADVANCE OR USE ← / → KEYS TO NAVIGATE
             </p>
 
             {/* Progress dots */}

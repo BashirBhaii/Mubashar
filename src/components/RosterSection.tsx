@@ -73,11 +73,11 @@ export function RosterSection() {
           </div>
         </div>
 
-        {/* Section Grid: Left side Media (Video + Picture), Right side Skills List */}
+        {/* Section Grid: Left-side video and right-side skills list */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
           
-          {/* Left Column (lg:col-span-5): 3D App Video Reel & Archival Picture */}
-          <div className="lg:col-span-5 space-y-6">
+          {/* Left Column (lg:col-span-5): 3D App Video Reel */}
+          <div className="lg:col-span-5">
             
             {/* Top Media: 3D Web App Video Reel */}
             <div className="space-y-2">
@@ -178,35 +178,17 @@ export function RosterSection() {
               </div>
             </div>
 
-            {/* Bottom Media: Developer Portrait Photo Card */}
-            <div className="pt-2">
-              <div className="relative w-full max-w-[340px] mx-auto lg:mx-0 rounded-2xl overflow-hidden border border-hairline bg-[#48403F] shadow-xl group">
-                <div className="aspect-[4/3] w-full overflow-hidden">
-                  <img
-                    src="/assets/aistudio/48004_8f9c21ae.jpg"
-                    alt="Mubashar Hussain - Technical Specialist"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-4 space-y-1 bg-[#48403F] border-t border-hairline">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-mono uppercase tracking-[0.16em] text-teal">
-                      SPECIALIST ARCHIVE // 04
-                    </span>
-                    <span className="text-[9px] font-mono text-muted">
-                      LAHORE, PK
-                    </span>
-                  </div>
-                  <h4 className="font-display font-bold text-sm text-ink">
-                    Mubashar Hussain
-                  </h4>
-                  <p className="text-[10.5px] font-mono text-secondary">
-                    Full Stack Developer & AI Integration Specialist
-                  </p>
-                </div>
-              </div>
-            </div>
+            <figure className="mt-6 overflow-hidden rounded-2xl border border-hairline bg-[#48403F] shadow-xl">
+              <img
+                src="/assets/aistudio/AHAPE%20INTERNATIONAL.png"
+                alt="AHAPE International website preview"
+                className="block h-auto w-full"
+                loading="lazy"
+              />
+              <figcaption className="border-t border-hairline px-4 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-secondary">
+                AHAPE INTERNATIONAL // WEBSITE PREVIEW
+              </figcaption>
+            </figure>
 
           </div>
 
