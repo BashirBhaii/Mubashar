@@ -14,7 +14,6 @@
     "@ai-sdk/google": "^1.1.15",
     "@google/genai": "^2.4.0",
     "@tailwindcss/vite": "^4.3.3",
-    "@vercel/analytics": "^2.0.1",
     "@vitejs/plugin-react": "^6.1.1",
     "ai": "^4.1.45",
     "clsx": "^2.1.1",
